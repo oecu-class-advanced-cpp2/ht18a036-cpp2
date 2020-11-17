@@ -12,11 +12,15 @@
 * ファイルを作成せよ。
 */
 /* -------------------------------------------------------------- */
-bool is_prime(int num){
+bool is_prime(int num) {
+	for (int i = 2; i <= num - 1; i++) {
+		if (num % i == 0)
+			return false;
+	}
 	return true;
 }
 
-int nth_prime(unsigned int a, unsigned int d, unsigned int n) 
+int nth_prime(unsigned int a, unsigned int d, unsigned int n)
 {
 	int num = a;
 	while (num <= CPP2_PRIME_UPPER_LIMIT) {
@@ -28,8 +32,10 @@ int nth_prime(unsigned int a, unsigned int d, unsigned int n)
 
 int main()
 {
+	std::cout << is_prime(4) << std::endl;
 	std::cout << is_prime(5) << std::endl;
 	std::cout << is_prime(6) << std::endl;
+	std::cout << is_prime(7) << std::endl;
 	// 以下、同様に、入出力例通りになるか確認せよ。
-    return 0;
+	return 0;
 }
