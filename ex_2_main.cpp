@@ -1,5 +1,7 @@
 // ex_2_main.cpp
 #include <iostream>
+#include <sstream>
+#include <algorithm>
 #include <string>
 
 namespace cpp2 {
@@ -27,11 +29,15 @@ namespace cpp2 {
 		*/
 		/* ----------------------------------------------------------------- */
 		mcxi(const std::string& s) : value_(0) {
-			for (auto pos = s.begin(); pos != s.end(); pos++) {
-				if (*pos >= 2, *pos <= 9) {
-
-				}else{
-
+			int digit = 0;
+			for (auto pos = s.begin(); pos != s.end(); ++pos) {
+				if (*pos >= '2' && *pos <= '9') {
+					digit = *pos - '0';
+				}
+				else {
+					auto u = unit(*pos);
+					value_ += std::max(digit, 1) * u;
+					digit = 0;
 				}
 			}
 		}
@@ -45,7 +51,9 @@ namespace cpp2 {
 		*/
 		/* ----------------------------------------------------------------- */
 		mcxi operator+(const mcxi& rhs) {
-
+			mcxi dest(*this);
+			dest.value_ += rhs.value_;
+			return dest;
 		}
 
 		/* ----------------------------------------------------------------- */
@@ -56,9 +64,66 @@ namespace cpp2 {
 		*/
 		/* ----------------------------------------------------------------- */
 		std::string to_string() const {
+			std::stringstream ss;
 
+			int q = value_ / 1000;
+			if (q == 1) {
+				ss << 'm';
+			}
+			if (q > 1) {
+				ss << q;
+				ss << 'm';
+			}
+
+			int r = value_ % 1000 / 100;
+			if (r == 1) {
+				ss << 'c';
+			}
+			if (r > 1) {
+				ss << r;
+				ss << 'c';
+			}
+
+			int s = value_ % 100 / 10;
+			if (s == 1) {
+				ss << 'x';
+			}
+			if (s > 1) {
+				ss << s;
+				ss << 'x';
+			}
+
+			int t = value_ % 10 / 1;
+			if (t == 1) {
+				ss << 'i';
+			}
+			if (t > 1) {
+				ss << t;
+				ss << 'i';
+			}
+
+
+			return ss.str();
 		}
 
+	private:
+
+		/* ----------------------------------------------------------------- */
+		/*
+		unit
+
+		’PˆÊ‚É‘Î‰ž‚·‚é’l‚ðŽæ“¾‚µ‚Ü‚·B
+		*/
+		/* ----------------------------------------------------------------- */
+		int unit(char c) {
+			switch (c) {
+			case 'm': return 1000;
+			case 'c': return 100;
+			case 'x': return 10;
+			case 'i': return 1;
+			}
+			return 1;
+		}
 
 	private:
 		int value_;
